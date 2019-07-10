@@ -7,6 +7,12 @@ page {
   justify-content: flex-start;
 }
 
+.user-today-step{
+  display: flex;
+  flex-grow: 1;
+  margin-bottom:10rpx;
+}
+
 .userinfo, .uploader, .tunnel {
   margin-top: 40rpx;
   height: 140rpx;

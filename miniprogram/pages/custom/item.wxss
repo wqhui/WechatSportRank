@@ -1,0 +1,28 @@
+/* miniprogram/pages/custom/item.wxss */
+.step-item {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: space-between;
+  padding:5rpx 20rpx;
+  border-bottom:1px solid #f6f6f6;
+  background-color: #ffffff;
+}
+.step-item .user-info{
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+.step-item .user-info .nick-name{
+  margin-left:10rpx
+}
+.step-item .avatar{
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background-size: cover;
+}
+.step-item .step{
+  font-size: 50rpx;
+}

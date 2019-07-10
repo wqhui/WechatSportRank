@@ -1,0 +1,9 @@
+<!--miniprogram/pages/custom/item.wxml-->
+<view class='step-item'>
+    <slot></slot>
+    <view class='user-info'>
+      <view class='avatar' style="background-image: url({{avatarUrl}})"></view>
+      <text class='nick-name'>{{userInfo.nickName}}</text>
+    </view>
+    <text class='step'>{{stepInfo.step}}</text>
+</view>

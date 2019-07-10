@@ -8,7 +8,8 @@
     "pages/deployFunctions/deployFunctions",
     "pages/chooseLib/chooseLib",
     "pages/rank/rank",
-    "pages/openapi/openapi"
+    "pages/openapi/openapi",
+    "pages/custom/item"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -18,17 +19,17 @@
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json",
-    "tabBar": {
-      "list": [
-        {
-          "pagePath": "pages/index/index",
-          "text": "首页"
-        },
-        {
-          "pagePath": "pages/rank/rank",
-          "text": "排名"
-        }
-      ]
-    },
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "本周"
+      },
+      {
+        "pagePath": "pages/rank/rank",
+        "text": "上周"
+      }
+    ]
+  },
   "debug": true
 }

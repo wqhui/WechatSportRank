@@ -1,4 +1,5 @@
 //app.js
+const STEP_TYPE=['today','thisWeek','lastWeek']
 App({
   onLaunch: function () {
     
@@ -11,5 +12,12 @@ App({
     }
 
     this.globalData = {}
+  },
+  getStepType:function(emu){//传 0 1 2,取不到则返回所有
+    return STEP_TYPE[emu] || STEP_TYPE
+  },
+  getDataBaseCollect: function (env='steps'){
+    const db = wx.cloud.database()
+    return db.collection('steps')
   }
 })
