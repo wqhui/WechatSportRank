@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+      "rank-list": "../../rankList/rankList"
+  }
+}

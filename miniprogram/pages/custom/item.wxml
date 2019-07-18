@@ -2,8 +2,20 @@
 <view class='step-item'>
     <slot></slot>
     <view class='user-info'>
-      <view class='avatar' style="background-image: url({{avatarUrl}})"></view>
-      <text class='nick-name'>{{userInfo.nickName}}</text>
+      <block wx:if="{{index>0}}">
+        <text class='rank-index'>{{index}}</text>
+      </block>
+      <block wx:elif="{{index>99}}">
+        <text class='rank-index fs10'>{{index}}</text>
+      </block>
+
+      <view class='avatar' style="background-image: url({{item.avatarUrl || defaultAvatarUrl}})"></view>
+      <text class='nick-name'>{{item.nickName}}</text>
     </view>
-    <text class='step'>{{stepInfo.step}}</text>
+     <block wx:if="{{step < minValue}}">
+      <text class='step min'>{{step}}</text>
+     </block>
+    <block wx:else>
+      <text class='step'>{{step}}</text>
+    </block>
 </view>

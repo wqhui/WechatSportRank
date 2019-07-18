@@ -5,9 +5,18 @@
   flex-grow: 1;
   align-items: center;
   justify-content: space-between;
-  padding:5rpx 20rpx;
+  padding:8rpx 20rpx;
   border-bottom:1px solid #f6f6f6;
   background-color: #ffffff;
+}
+.step-item .rank-index{
+  width:50rpx;
+  text-align:center;
+  margin-right:5rpx;
+  flex-grow: 0;
+}
+.step-item .fs10{
+  font-size: 20rpx;
 }
 .step-item .user-info{
   display: flex;
@@ -15,7 +24,7 @@
   flex-direction: row;
 }
 .step-item .user-info .nick-name{
-  margin-left:10rpx
+  margin-left:15rpx
 }
 .step-item .avatar{
   width: 100rpx;
@@ -25,4 +34,10 @@
 }
 .step-item .step{
   font-size: 50rpx;
+   color: #228B22;
+
+}
+
+.step-item .min{
+  color: red;
 }

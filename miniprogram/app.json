@@ -1,35 +1,17 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/userConsole/userConsole",
-    "pages/storageConsole/storageConsole",
-    "pages/databaseGuide/databaseGuide",
-    "pages/addFunction/addFunction",
-    "pages/deployFunctions/deployFunctions",
-    "pages/chooseLib/chooseLib",
-    "pages/rank/rank",
-    "pages/openapi/openapi",
-    "pages/custom/item"
+    "pages/lastWeek/lastWeek",
+    "pages/custom/item",
+    "pages/rankList/rankList"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#F6F6F6",
-    "navigationBarTitleText": "云开发 QuickStart",
+    "navigationBarTitleText": "运动排名",
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json",
-  "tabBar": {
-    "list": [
-      {
-        "pagePath": "pages/index/index",
-        "text": "本周"
-      },
-      {
-        "pagePath": "pages/rank/rank",
-        "text": "上周"
-      }
-    ]
-  },
   "debug": true
 }

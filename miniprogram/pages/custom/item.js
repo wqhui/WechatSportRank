@@ -8,16 +8,23 @@ Component({
   },
 
   properties: {
-    stepInfo: {
+    item: {
       type: Object,//类型
-      value:{step:''}
+      value:{}
     },
-    userInfo:{
-      type: Object,//类型
+    step:{
+      type:Number,
     },
-    avatarUrl:{
+    index:{
       type: String,//类型
+    },
+    minValue:{
+      type:Number,
+      value:50000
+    },
+    defaultAvatarUrl:{
+      type: String,//类型,
+      value:'../../images/user-unlogin.png'
     }
-
   },
 })

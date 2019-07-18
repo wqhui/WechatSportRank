@@ -1,5 +1,6 @@
 {
   "usingComponents": {
-    "custom-item": "../../custom/item"
-  }
+    "rank-list": "../../rankList/rankList"
+  },
+  "enablePullDownRefresh":true
 }

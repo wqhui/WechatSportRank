@@ -1,67 +1,51 @@
 <!--index.wxml-->
 <view class="container">
-    <button 
-      open-type="getUserInfo" 
-      bindgetuserinfo="onGetUserInfo"
-      class="userinfo-avatar"
-      style="background-image: url({{avatarUrl}})"
-    ></button>
-      <button 
-      bindtap="onQuery"
-      class="userinfo-avatar"
-    >111</button>
-    <view class='user-today-step'>
-      <custom-item class='custom-item' stepInfo="{{todayStep}}" userInfo="{{userInfo}}" avatarUrl="{{avatarUrl}}">
-      </custom-item>
+  <view class='tab'>
+    <view class='{{activeIndex===0?"item active":"item"}}' data-index='0' bindtap='onChangeTab'>本周排行</view>
+    <view class='{{activeIndex===1?"item active":"item"}}' data-index='1' bindtap='onChangeTab'>上周排行</view>
+  </view>
+  <view class='user-today-step'>
+    <view class='no-userinfo' wx:if="{{!logged}}">
+      <view class='tips-box'>
+        <icon type='warn' size='18'></icon>
+        <text>您还未授予用户权限，请点击下方空白按钮授权</text>
+      </view>
     </view>
-    <view class='rank-list'>
-    
-    </view>
-   <!--
 
-  <view class="userinfo">
-    <button 
-      open-type="getUserInfo" 
-      bindgetuserinfo="onGetUserInfo"
-      class="userinfo-avatar"
-      style="background-image: url({{avatarUrl}})"
-    ></button>
-    <view>
-      <button class="userinfo-nickname" bindtap="onGetOpenid">点击获取 openid</button>
+    <block wx:if="{{!logged}}">
+      <button class='user-btn' open-type="getUserInfo" bindgetuserinfo="onGetUserInfo">
+        获取权限
+      </button>
+    </block>
+    <block wx:else>
+      <button class="user-btn userinfo-avatar" style="background-image:url({{avatarUrl}})"></button>
+    </block>
+
+    <view class='step-info'>
+      <view class='step-box'>
+        <text>  {{todayStep>0?todayStep:'--'}}</text>
+        <text class='step-title'>今日步数</text>
+      </view>
+      <view class='step-box'>
+        <block wx:if='{{activeIndex===0}}'>
+          <text> {{thisWeekStepSum>0?thisWeekStepSum:'--'}}</text>
+        </block>
+        <block wx:else>
+          <text> {{lastWeekStepSum>0?lastWeekStepSum:'--'}}</text>
+        </block>
+        <text class='step-title'>{{titleNames[activeIndex]}}步数</text>
+      </view>
+      <view class='step-box'>
+        <text>{{stepRank>0?stepRank:'--'}}</text>
+        <text class='step-title'>{{titleNames[activeIndex]}}排名</text>
+      </view>
     </view>
   </view>
+  <block wx:if="{{rankList.length>0}}">
+    <rank-list rankList="{{rankList}}" isLastWeek='{{activeIndex===1}}'></rank-list>
+  </block>
+  <block wx:else>
+    <view class='no-rank'>暂无排名信息</view>
+  </block>
 
-
-
-  <view class="uploader">
-    <view class="uploader-text" bindtap="doUpload">
-      <text>上传图片</text>
-    </view>
-    <view class="uploader-container" wx:if="{{imgUrl}}">
-      <image class="uploader-image" src="{{imgUrl}}" mode="aspectFit" bindtap="previewImg"></image>
-    </view>
-  </view>
-
-
-
-  <view class="uploader">
-    <navigator url="../databaseGuide/databaseGuide" open-type="navigate" class="uploader-text">
-      <text>前端操作数据库</text>
-    </navigator>
-  </view>
-
-
-  <view class="uploader">
-    <navigator url="../addFunction/addFunction" open-type="navigate" class="uploader-text">
-      <text>快速新建云函数</text>
-    </navigator>
-  </view>
-
-
-  <view class="uploader">
-    <navigator url="../openapi/openapi" open-type="navigate" class="uploader-text">
-      <text>云调用</text>
-    </navigator>
-  </view>
-  -->
 </view>

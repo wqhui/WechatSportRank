@@ -1,11 +1,36 @@
 /**app.wxss**/
+
 .container {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-} 
+  flex-grow: 1;
+}
 
-.custom-item{
+.step-info{
+  display: flex;
+  margin: 20rpx;
+  align-self:stretch;
+  justify-content: space-around;
+}
+.step-box{
+  display:flex;
+  align-items: flex-end;
+  flex-direction:column;
+}
+.step-box .step-title{
+  font-size: 25rpx;
+  color: #7D8F99;
+}
+
+.no-rank {
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.custom-item {
   display: flex;
   flex-grow: 1;
 }
@@ -14,10 +39,10 @@ button {
   background: initial;
 }
 
-button:focus{
+button:focus {
   outline: 0;
 }
 
-button::after{
+button::after {
   border: none;
 }

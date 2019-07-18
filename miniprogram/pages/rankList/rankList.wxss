@@ -1,0 +1,8 @@
+/* miniprogram/pages/rankList/rankList.wxss */
+
+.no-rank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+}

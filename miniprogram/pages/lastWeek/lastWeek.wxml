@@ -1,0 +1,8 @@
+<view class="container">  
+  <block wx:if="{{rankList.length>0}}">
+    <rank-list isLastWeek="{{true}}" rankList="{{rankList}}"></rank-list>
+  </block>
+  <block wx:else>
+    <view class='no-rank'>暂无排名信息</view>
+  </block>
+</view>
