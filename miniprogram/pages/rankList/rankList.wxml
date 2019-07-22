@@ -1,7 +1,7 @@
 <!--miniprogram/pages/rankList/rankList.wxml-->
-  <view class='rank-list'>
+  <scroll-view class='rank-list'>
     <view wx:key="unique" wx:for="{{rankList}}">
       <custom-item class='custom-item' index="{{index+1}}" item="{{item}}" step="{{!isLastWeek?item.thisWeekStep:item.lastWeekStep}}">
       </custom-item>
     </view>
-  </view>
+  </scroll-view>

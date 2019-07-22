@@ -15,31 +15,38 @@ Page({
     stepRank: 0,
     activeIndex: 0,
     titleNames: ['本周', '上周'],
-    orderFields: ['thisWeekStep', 'lastWeekStep']
+    orderFields: ['thisWeekStep', 'lastWeekStep'],
+    openGId: ''
   },
-
-  onLoad: function () {
+  onLoad: function (option) {
+    // wx.showLoading({
+    //   title: '加载中...',
+    // })
+    wx.updateShareMenu({
+      withShareTicket: true,
+    })
+    this.onGetGroupOpenid()
     const cb = () => {
       // 获取用户信息
-      wx.getUserInfo({
-        success: res => {
-          this.setData({
-            avatarUrl: res.userInfo.avatarUrl,
-            userInfo: res.userInfo,
-            logged: true
-          })
-          this.onGetUserMsg()
-        },
-        fail: err => {
-          this.setData({
-            logged: false
-          })
-        }
-      })
+      // wx.getUserInfo({
+      //   success: res => {
+      //     this.setData({
+      //       avatarUrl: res.userInfo.avatarUrl,
+      //       userInfo: res.userInfo,
+      //       logged: true
+      //     })
+      //     this.onGetUserMsg()
+      //   },
+      //   fail: err => {
+      //     this.setData({
+      //       logged: false
+      //     })
+      //     this.onQueryOrderBy('', orderFields[activeIndex], 'desc')
+      //   }
+      // })
     }
     this.onGetOpenid(cb)
     let { activeIndex, orderFields } = this.data
-    this.onQueryOrderBy('', orderFields[activeIndex], 'desc')
   },
 
   onPullDownRefresh: function () {
@@ -68,7 +75,7 @@ Page({
 
   onShareAppMessage: function () {
     return {
-      title: '快来跟大家PK一下你这周的运动步数吧',
+      title: '在群里你本周步数排名这么高！？',
       path: '/pages/index/index'
     }
   },
@@ -76,7 +83,7 @@ Page({
   onGetUserMsg: function (stopCb) {
     var that = this
     wx.login({
-      success (res) {
+      success(res) {
         if (res.code) {
           wx.getWeRunData({
             success: function (res) {
@@ -96,6 +103,9 @@ Page({
     let { orderFields, activeIndex } = this.data
     newIndex = Number(newIndex)
     if (newIndex !== activeIndex) {
+      wx.showLoading({
+        title: '加载中...',
+      })
       this.setData({
         activeIndex: newIndex
       })
@@ -105,6 +115,9 @@ Page({
 
   onGetUserInfo: function (e) {
     if (!this.logged && e.detail.userInfo) {
+      wx.showLoading({
+        title: '加载中...',
+      })
       this.setData({
         logged: true,
         avatarUrl: e.detail.userInfo.avatarUrl,
@@ -287,11 +300,11 @@ Page({
           ...ohters
         } = res.data
         let newData = Object.assign(ohters, data)
-        let isReload = data.todayStep !== ohters.todayStep || data[key] !== ohters[key]
+        //let isReload = data.todayStep !== ohters.todayStep || data[key] !== ohters[key] || 
         db.collection('user').doc(id).set({
           data: newData,
           success: () => { // 更新成功就刷新排名
-            isReload && that.onQueryOrderBy('', key, 'desc')
+            that.onQueryOrderBy('', key, 'desc')
           },
           fail: function (err) {
             console.log('onAddOrUpdateById', err)
@@ -328,12 +341,14 @@ Page({
         let {
           data
         } = res
-        app.globalData.rankList = data
         let index = data.findIndex((item) => item._openid === that.data.openid)
         index += 1
         that.setData({
           stepRank: index,
           rankList: data
+        })
+        wx.showToast({
+          title: '加载成功',
         })
       },
       fail: function (err) {
@@ -379,7 +394,8 @@ Page({
   // 新增一条记录
   onAdd: function (data, env, cb) {
     let db = wx.cloud.database()
-    db.collection('user').add({
+    let _env = env || 'user'
+    db.collection(_env).add({
       data: data,
       success: res => {
         // 在返回结果中会包含新创建的记录的 _id
@@ -394,6 +410,82 @@ Page({
         console.error('[数据库] [新增记录] 失败：', err)
       }
     })
-  }
+  },
+  //获得群组openid
+  onGetGroupOpenid: function (shareTicket) {
+    let _shareTicket = shareTicket || app.globalData.shareTicket
+    if (!_shareTicket) return
+    let that = this
+    wx.getShareInfo({
+      shareTicket: _shareTicket,
+      success: function (res) {
+        let cloudId = wx.cloud.CloudID(res.cloudID)
+        wx.cloud.callFunction({
+          name: 'weRun',
+          data: {
+            groupData: cloudId
+          },
+          success: function (res) {
+            let { result } = res
+            let openGId = result.event.groupData.data.openGId
+            that.setData({
+              openGId: openGId
+            })
+            let exsitCb = (data)=>{
+              let obj = data[0]
+              let {_id, openids=[]} = obj
+              let openid = that.data.openid
+              let index = openids.findIndex((item) => item === openid)
+              console.log(index)
+              if (index > -1) {//已经存在就不用管了
+                return
+              }
+              openids.push(openid)
+              that.onUpdateById(_id, { openids: openids}, 'group')
+            }
+            that.onSearchGroupById({ openGId: openGId }, 'group', exsitCb)
+          },
+          fail: function (err) {
+            console.error(err)
+          }
+        })
+      },
+      fail: function (err) {
+        console.error(err)
+      }
+    })
+  },
+  //查询群组
+  onSearchGroupById: function (con, env, exsitCb) {
+    let db = wx.cloud.database()
+    let _env = env || user
+    db.collection(_env).where(con).get({
+      success: (res) => {
+        let { data } = res
+        console.log(data)
+        if (data.length > 0) {//证明已经存在
+          exsitCb && exsitCb(res.data)
+          return
+        }
+        let newData = Object.assign(con, { openids: [this.data.openid] })
+        this.onAdd(con, _env)
+      },
+      fail: (err) => {
+        console.error(err)
+      }
+    })
+  },
 
+  onUpdateById: function (id, data, env) {
+    if (id) {
+      return
+    }
+    let _env = env || 'user'
+    db.collection(_env).doc(id).update({
+      data: data,
+      success: () => {
+
+      }
+    })
+  }
 })

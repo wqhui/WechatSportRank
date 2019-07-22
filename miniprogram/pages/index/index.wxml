@@ -1,9 +1,5 @@
 <!--index.wxml-->
 <view class="container">
-  <view class='tab'>
-    <view class='{{activeIndex===0?"item active":"item"}}' data-index='0' bindtap='onChangeTab'>本周排行</view>
-    <view class='{{activeIndex===1?"item active":"item"}}' data-index='1' bindtap='onChangeTab'>上周排行</view>
-  </view>
   <view class='user-today-step'>
     <view class='no-userinfo' wx:if="{{!logged}}">
       <view class='tips-box'>
@@ -20,7 +16,6 @@
     <block wx:else>
       <button class="user-btn userinfo-avatar" style="background-image:url({{avatarUrl}})"></button>
     </block>
-
     <view class='step-info'>
       <view class='step-box'>
         <text>  {{todayStep>0?todayStep:'--'}}</text>
@@ -40,6 +35,10 @@
         <text class='step-title'>{{titleNames[activeIndex]}}排名</text>
       </view>
     </view>
+  </view>
+  <view class='tab'>
+    <view class='{{activeIndex===0?"item active":"item"}}' data-index='0' bindtap='onChangeTab'>本周排行</view>
+    <view class='{{activeIndex===1?"item active":"item"}}' data-index='1' bindtap='onChangeTab'>上周排行</view>
   </view>
   <block wx:if="{{rankList.length>0}}">
     <rank-list rankList="{{rankList}}" isLastWeek='{{activeIndex===1}}'></rank-list>
