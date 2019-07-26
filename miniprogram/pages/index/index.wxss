@@ -11,6 +11,8 @@ page {
   display: flex;
   background-color: #ffffff;
   margin-bottom: 20rpx;
+  flex-grow: 0;
+  flex-shrink: 0;
 }
 .tab .item {
   color: #666;
@@ -47,6 +49,8 @@ page {
   margin-bottom: 20rpx;
   flex-direction: column;
   background: #ffffff;
+  flex-grow: 0;
+  flex-shrink: 0;
 }
 
 .user-btn{

@@ -1,5 +1,6 @@
 // index.js
 const app = getApp()
+var util = require('../../utils/time.js');
 Page({
   data: {
     avatarUrl: '/pages/index/user-unlogin.png',
@@ -25,9 +26,9 @@ Page({
     wx.updateShareMenu({
       withShareTicket: true,
     })
-    this.onGetGroupOpenid()
+    //this.onGetGroupOpenid()  //group id
     const cb = () => {
-      // 获取用户信息
+      //获取用户信息
       // wx.getUserInfo({
       //   success: res => {
       //     this.setData({
@@ -195,7 +196,8 @@ Page({
           thisWeekStep: thisWeekStepSum,
           lastWeekStep: lastWeekStepSum,
           nickName: userInfo.nickName || '',
-          avatarUrl: avatarUrl
+          avatarUrl: avatarUrl,
+          lastUpdateTime: todayStepInfo.timestamp
         }
         that.onAddOrUpdateById(dataInfo, openid, '', stopCb)
 
@@ -286,7 +288,6 @@ Page({
       console.error('id error:' + id)
       return
     }
-
     let that = this
     let { activeIndex, orderFields } = this.data
     let key = orderFields[activeIndex]
@@ -333,16 +334,50 @@ Page({
   onQueryOrderBy: function (con, orderField, orderType, env) {
     if (!orderField || !orderType) return
     let that = this
-    let db = wx.cloud.database()
-    db.collection('user').orderBy(orderField, orderType).limit(100).get({
-      success: function (res) {
-        // res.data 包含该记录的数据
-        console.log(' [orderList] 调用成功: ', res)
+    // let db = wx.cloud.database()
+    // db.collection('user').orderBy(orderField, orderType).limit(100).get({
+    //   success: function (res) {
+    //     // res.data 包含该记录的数据
+    //     console.log(' [orderList] 调用成功: ', res)
+    //     let {
+    //       data
+    //     } = res
+    //     let index = data.findIndex((item) => item._openid === that.data.openid)
+    //     index += 1
+    //     that.setData({
+    //       stepRank: index,
+    //       rankList: data
+    //     })
+    //     wx.showToast({
+    //       title: '加载成功',
+    //     })
+    //   },
+    //   fail: function (err) {
+    //     console.error(' [orderList] 调用失败', err)
+    //     wx.showToast({
+    //       icon: 'none',
+    //       title: '获取排名失败，请重试'
+    //     })
+    //   }
+    // })
+
+    // 调用云函数
+    wx.cloud.callFunction({
+      name: 'orderList',
+      data: {
+        con: con,
+        orderField: orderField,
+        orderType: orderType
+      },
+      success: res => {
+        console.log('[云函数] [orderList] 调用成功: ', res)
         let {
-          data
+          result
         } = res
+        let data = result.data
+
         let index = data.findIndex((item) => item._openid === that.data.openid)
-        index += 1
+        index = index === -1 ? '100+':index+1
         that.setData({
           stepRank: index,
           rankList: data
@@ -351,7 +386,7 @@ Page({
           title: '加载成功',
         })
       },
-      fail: function (err) {
+      fail: err => {
         console.error(' [orderList] 调用失败', err)
         wx.showToast({
           icon: 'none',
@@ -359,36 +394,6 @@ Page({
         })
       }
     })
-
-    // 调用云函数
-    // wx.cloud.callFunction({
-    //   name: 'orderList',
-    //   data: {
-    //     con: con,
-    //     orderField: orderField,
-    //     orderType: orderType
-    //   },
-    //   success: res => {
-    //     console.log('[云函数] [orderList] 调用成功: ', res)
-    //     let {
-    //       result
-    //     } = res
-    //     app.globalData.rankList = result.data
-    //     let index = result.data.findIndex((item) => item._openid === that.data.openid)
-    //     index += 1
-    //     that.setData({
-    //       stepRank: index,
-    //       rankList: result.data
-    //     })
-    //   },
-    //   fail: err => {
-    //     console.error('[云函数] [orderList] 调用失败', err)
-    //     wx.showToast({
-    //       icon: 'none',
-    //       title: '获取排名失败，请重试',
-    //     })
-    //   }
-    // })
   },
 
   // 新增一条记录
